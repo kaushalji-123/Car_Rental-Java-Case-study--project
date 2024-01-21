@@ -8,19 +8,22 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import Exception.CarNotFoundException;
+import Exception.CustomerNotFoundException;
+
 public interface ICarLeaseRepository {
     // Vehicle Management
     void addVehicle(Vehicle vehicle) throws SQLException;
     void removeVehicle(int vehicleID) throws SQLException;
     List<Vehicle> listAvailableVehicles();
     List<Vehicle> listRentedVehicles();
-    Vehicle findVehicleById(int vehicleID);
+    Vehicle findVehicleById(int vehicleID) throws CarNotFoundException;
 
     // Customer Management
     void addCustomer(Customer customer) throws SQLException;
     void removeCustomer(int customerID);
     List<Customer> listCustomers();
-    Customer findCustomerById(int customerID);
+    Customer findCustomerById(int customerID) throws CustomerNotFoundException;
 
     // Lease Management
     Lease createLease(int customerID, int vehicleID, Date startDate, Date endDate);
