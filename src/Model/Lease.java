@@ -9,27 +9,22 @@ public class Lease {
     private int carID;
     private LocalDate startDate;
     private LocalDate endDate;
-    private double totalCost;
+    private LeaseType type;
 
-    // Parameterized constructor
-    public Lease(int leaseID, int customerID, int carID, LocalDate startDate, LocalDate endDate, double totalCost) {
-        this.leaseID = leaseID;
-        this.customerID = customerID;
-        this.carID = carID;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.totalCost = totalCost;
+    public enum LeaseType {
+        DAILY, MONTHLY
     }
 
-    public Lease(int leaseID, int customerID, int vehicleID, Date startDate2, Date endDate2) {
+    public Lease(int leaseID, int customerID, int vehicleID, Date startDate2, Date endDate2, LeaseType type) {
         this.leaseID = leaseID;
         this.customerID = customerID;
-        this.carID = vehicleID;  // Assuming carID corresponds to vehicleID
+        this.carID = vehicleID;
         this.startDate = startDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.endDate = endDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        this.type = type;
     }
 
-	// Getter methods
+    // Getter methods
     public int getLeaseID() {
         return leaseID;
     }
@@ -50,8 +45,8 @@ public class Lease {
         return endDate;
     }
 
-    public double getTotalCost() {
-        return totalCost;
+    public LeaseType getType() {
+        return type;
     }
 
     // Setter methods (if needed)
@@ -63,7 +58,17 @@ public class Lease {
                 ", Car ID: " + carID +
                 ", Start Date: " + startDate +
                 ", End Date: " + endDate +
-                ", Total Cost: $" + totalCost);
+                ", Lease Type: " + type);
+    }
+
+    public Customer getCustomer() {
+        // TODO: Implement this method
+        return null;
+    }
+
+    public String getModel() {
+        // TODO: Implement this method
+        return null;
     }
 
     // Add more methods as needed for specific functionality

@@ -49,7 +49,7 @@ public class Main {
 	public static void vehicleManagement()
 	{
 		Scanner sc=new Scanner(System.in);
-		oo, icl=new ICarLeaseImpl();
+		 ICarLeaseImpl icl = new ICarLeaseImpl();
 		System.out.println("Enter Vehicle Details");
 		System.out.println("1.Enter New Car into Vehicles Table");
 		System.out.println("2.Remove the Car");
@@ -73,13 +73,13 @@ public class Main {
             System.out.println("Enter DailyRate");
             double DailyRate=sc.nextDouble();
             System.out.println("Enter status of vehicle");
-            String status=sc.next();
+            boolean isAvailable = sc.nextBoolean();
             System.out.println("Enter passengerCapacity");
             int passengerCapacity=sc.nextInt();
             System.out.println("Enter engine capacity");
-            double engineCapacity=sc.nextDouble();
+            int engineCapacity=sc.nextInt();
             Vehicle car;
-            car=new Vehicle(vehicleID,make,model,year,DailyRate,status,passengerCapacity,engineCapacity);
+            car = new Vehicle(vehicleID, make, model, year, DailyRate, isAvailable, passengerCapacity, engineCapacity);
             icl.addCar(car);
 			break;
 		case 2:
@@ -108,8 +108,10 @@ public class Main {
 			break;
 		case 4:
 			System.out.println("Listing all Rented cars");
+			icl.listCustomers();
+			List<Customer> cust = icl.listCustomers();
 			icl.listAvailableCars();
-			List<Vehicle> vehicleList=icl.listRentedCars();
+			List<Vehicle> vehicleList=icl.listAvailableCars();
 			for(Vehicle veh: vehicleList)
 			{
 				    System.out.println("Vehicle ID: " + veh.getVehicleID());
@@ -133,7 +135,6 @@ public class Main {
 			        System.out.println("Model: " + vo.getModel());
 			        System.out.println("Year: " + vo.getYear());
 			        System.out.println("DailyRate: " + vo.getDailyRate());
-			        System.out.println("status: " + vo.getStatus());
 			        System.out.println("passengerCapacity: " + vo.getPassengerCapacity());
 			        System.out.println("engineCapacity: " + vo.getEngineCapacity());
 			        System.out.println("------------------------");
@@ -193,7 +194,7 @@ public class Main {
 		        System.out.println("First Name: " + custo.getFirstName());
 		        System.out.println("Last Name: " + custo.getLastName());
 		        System.out.println("Email: " + custo.getEmail());
-		        System.out.println("Phone Number: " + custo.getPhone());
+		        System.out.println("Phone Number: " + custo.getPhoneNumber());
 		        System.out.println("------------------------");
 		    }
 			break;
@@ -206,7 +207,7 @@ public class Main {
 	        System.out.println("First Name: " + cust1.getFirstName());
 	        System.out.println("Last Name: " + cust1.getLastName());
 	        System.out.println("Email: " + cust1.getEmail());
-	        System.out.println("Phone Number: " + cust1.getPhone());
+	        System.out.println("Phone Number: " + cust1.getPhoneNumber());
 	        System.out.println("------------------------");
 			break;
 		case 5:
@@ -247,15 +248,14 @@ public class Main {
 				System.out.println("Customer ID:"+lease.getCustomer().getCustomerID());
 				System.out.println("Customer Name:"+lease.getCustomer().getFirstName()+" "+lease.getCustomer().getLastName());
 				System.out.println("Customer Email:"+lease.getCustomer().getEmail());
-				System.out.println("Customer Phone:"+lease.getCustomer().getPhone());
-				System.out.println("VehicleID:  "+lease.getVehicle().getVehicleID());
-				System.out.println("Vehiclec Make:  "+lease.getVehicle().getMake());
-				System.out.println("Vehicle Model:  "+lease.getVehicle().getModel());
-				System.out.println("Vehicle Year: "+lease.getVehicle().getYear());
-				System.out.println("Vehicle DailyRate:  "+lease.getVehicle().getDailyRate());
-				System.out.println(lease.getVehicle().getStatus());
-				System.out.println("Vehicle Capacity: "+lease.getVehicle().getPassengerCapacity());
-				System.out.println(lease.getVehicle().getEngineCapacity());
+				System.out.println("Customer Phone:"+lease.getCustomer().getPhoneNumber());
+				System.out.println("VehicleID:  "+lease.getCarID());
+//				System.out.println("Vehicle Model:  "+veh.getModel());
+//				System.out.println("Vehicle Year: "+lease.getVehicle().getYear());
+//				System.out.println("Vehicle DailyRate:  "+lease.getVehicle().getDailyRate());
+//				System.out.println(lease.getVehicle().getStatus());
+//				System.out.println("Vehicle Capacity: "+lease.getVehicle().getPassengerCapacity());
+//				System.out.println(lease.getVehicle().getEngineCapacity());
 				System.out.println(lease.getType());
 
 				break;
@@ -273,15 +273,15 @@ public class Main {
 					System.out.println("Customer ID:"+l.getCustomer().getCustomerID());
 					System.out.println("Customer Name:"+l.getCustomer().getFirstName()+" "+l.getCustomer().getLastName());
 					System.out.println("Customer Email:"+l.getCustomer().getEmail());
-					System.out.println("Customer Phone:"+l.getCustomer().getPhone());
-					System.out.println("VehicleID:  "+l.getVehicle().getVehicleID());
-					System.out.println("Vehiclec Make:  "+l.getVehicle().getMake());
-					System.out.println("Vehicle Model:  "+l.getVehicle().getModel());
-					System.out.println("Vehicle Year: "+l.getVehicle().getYear());
-					System.out.println("Vehicle DailyRate:  "+l.getVehicle().getDailyRate());
-					System.out.println(l.getVehicle().getStatus());
-					System.out.println("Vehicle Capacity: "+l.getVehicle().getPassengerCapacity());
-					System.out.println(l.getVehicle().getEngineCapacity());
+					System.out.println("Customer Phone:"+l.getCustomer().getPhoneNumber());
+					System.out.println("VehicleID:  "+l.getCarID());
+//					System.out.println("Vehiclec Make:  "+l.getVehicle().getMake());
+//					System.out.println("Vehicle Model:  "+l.getVehicle().getModel());
+//					System.out.println("Vehicle Year: "+l.getVehicle().getYear());
+//					System.out.println("Vehicle DailyRate:  "+l.getVehicle().getDailyRate());
+//					System.out.println(l.getVehicle().getStatus());
+//					System.out.println("Vehicle Capacity: "+l.getVehicle().getPassengerCapacity());
+//					System.out.println(l.getVehicle().getEngineCapacity());
 					System.out.println("StartDate: "+l.getStartDate());
 					System.out.println("EndDate: "+l.getEndDate());
 					System.out.println("LeaseType: "+l.getType());
@@ -297,15 +297,15 @@ public class Main {
 					System.out.println("Customer ID:"+l.getCustomer().getCustomerID());
 					System.out.println("Customer Name:"+l.getCustomer().getFirstName()+" "+l.getCustomer().getLastName());
 					System.out.println("Customer Email:"+l.getCustomer().getEmail());
-					System.out.println("Customer Phone:"+l.getCustomer().getPhone());
-					System.out.println("VehicleID:  "+l.getVehicle().getVehicleID());
-					System.out.println("Vehiclec Make:  "+l.getVehicle().getMake());
-					System.out.println("Vehicle Model:  "+l.getVehicle().getModel());
-					System.out.println("Vehicle Year: "+l.getVehicle().getYear());
-					System.out.println("Vehicle DailyRate:  "+l.getVehicle().getDailyRate());
-					System.out.println(l.getVehicle().getStatus());
-					System.out.println("Vehicle Capacity: "+l.getVehicle().getPassengerCapacity());
-					System.out.println(l.getVehicle().getEngineCapacity());
+					System.out.println("Customer Phone:"+l.getCustomer().getPhoneNumber());
+					System.out.println("VehicleID:  "+l.getCarID());
+//					System.out.println("Vehiclec Make:  "+l.vehicle().getMake());
+//					System.out.println("Vehicle Model:  "+l.getVehicle().getModel());
+//					System.out.println("Vehicle Year: "+l.getVehicle().getYear());
+//					System.out.println("Vehicle DailyRate:  "+l.getVehicle().getDailyRate());
+//					System.out.println(l.getVehicle().getStatus());
+//					System.out.println("Vehicle Capacity: "+l.getVehicle().getPassengerCapacity());
+//					System.out.println(l.getVehicle().getEngineCapacity());
 					System.out.println("StartDate: "+l.getStartDate());
 					System.out.println("EndDate: "+l.getEndDate());
 					System.out.println("LeaseType: "+l.getType());

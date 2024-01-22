@@ -5,10 +5,10 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String email;
-    private int phoneNumber;
+    private long phoneNumber;
 
     // Parameterized constructor
-    public Customer(int customerID, String firstName, String lastName, String email, int phoneNumber) {
+    public Customer(int customerID, String firstName, String lastName, String email, long phoneNumber) {
         this.customerID = customerID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -33,7 +33,7 @@ public class Customer {
         return email;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 

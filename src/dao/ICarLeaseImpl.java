@@ -23,10 +23,10 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 		String model=car.getModel();
 		int year=car.getYear();
 		double Rate=car.getDailyRate();
-		String status=car.getStatus();
+		boolean isAvailable = true;
 		int passengers=car.getPassengerCapacity();
-		double engine=car.getEngineCapacity();
-		String query="insert into Vehicle values('"+vehicleID+"','"+make+"','"+model+"','"+year+"','"+Rate+"','"+status+"','"+passengers+"','"+engine+"')";
+		int engine=car.getEngineCapacity();
+		String query="insert into carrental.vehicle values('"+vehicleID+"','"+make+"','"+model+"','"+year+"','"+Rate+"','"+(isAvailable ? 1 : 0)+"','"+passengers+"','"+engine+"')";
 		try
 		{
 			c.s.executeUpdate(query);
@@ -44,7 +44,6 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 	{
 		// TODO Auto-generated method stub
 		DBConnection c=new DBConnection();
-		String query="delete from Lease where VehicleID='"+VehicleID+"'";
 		String query1="delete from vehicle where VehicleID='"+VehicleID+"'";
 		try
 		{
@@ -70,7 +69,7 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 		ResultSet rs=c.s.executeQuery(query);
 			while(rs.next())
 			{
-				v.add(new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("Year"),rs.getDouble("DailyRate"),rs.getString("status"),rs.getInt("passengerCapacity"),rs.getDouble("engineCapacity")));
+				v.add(new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("Year"),rs.getDouble("DailyRate"),rs.getBoolean("status"),rs.getInt("passengerCapacity"),rs.getInt("engineCapacity")));
 			}
 			System.out.println("After connection");
 		
@@ -93,7 +92,7 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 		ResultSet rs=c.s.executeQuery(query);
 			while(rs.next())
 			{
-				ve.add(new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("Year"),rs.getDouble("DailyRate"),rs.getString("status"),rs.getInt("passengerCapacity"),rs.getDouble("engineCapacity")));
+				ve.add(new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("Year"),rs.getDouble("DailyRate"),rs.getBoolean("status"),rs.getInt("passengerCapacity"),rs.getInt("engineCapacity")));
 			}
 			System.out.println("After connection");
 		
@@ -106,17 +105,17 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 	}
 
 	@Override
-	public Vehicle findCarById(int VehicleID){
+	public Vehicle findCarById(int vehicleID){
 		// TODO Auto-generated method stub
 		Vehicle v = null;
 		DBConnection c=new DBConnection();
-		String query="select * from Vehicle where VehicleID='"+VehicleID+"'";
+		String query="select * from vehicle where vehicleID='"+vehicleID+"'";
 		try
 		{
 			ResultSet rs=c.s.executeQuery(query);
 			if(rs.next())
 			{
-				v=new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("Year"),rs.getDouble("DailyRate"),rs.getString("status"),rs.getInt("passengerCapacity"),rs.getDouble("engineCapacity"));
+				v=new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("Year"),rs.getDouble("DailyRate"),rs.getBoolean("status"),rs.getInt("passengerCapacity"),rs.getInt("engineCapacity"));
 			}
 			else
 			{
@@ -139,7 +138,7 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 		String FName=customer.getFirstName();
 		String LName=customer.getLastName();
 		String Email=customer.getEmail();
-		long PNumber=customer.getPhone();
+		long PNumber=customer.getPhoneNumber();
 		String query="insert into Customer values('"+CID+"','"+FName+"','"+LName+"','"+Email+"','"+PNumber+"')";
 		try
 		{
@@ -200,7 +199,7 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 		// TODO Auto-generated method stub
 		Customer cust1=null;
 		DBConnection c=new DBConnection();
-		String query="select * from Customer where CustomerID='"+customerid+"'";
+		String query="select * from customer where customerID='"+customerid+"'";
 		try
 		{
 			ResultSet rs=c.s.executeQuery(query);
@@ -222,43 +221,43 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 	}
 
 	@Override
-	public Lease createLease(int VehicleID,int CustomerID,String startDate,String endDate)
-	{
-		Conn c=new Conn();
-		Lease lease=null;
-		LocalDate sDate=LocalDate.parse(startDate);
-		LocalDate eDate=LocalDate.parse(endDate);
-		long diff=ChronoUnit.DAYS.between(sDate, eDate);
-		String type=null;
-		if(diff>30)
-		{
-			type="Monthly";
-		}
-		else
-		{
-			type="Daily";
-		}
-		System.out.println(type);
-		String query = "INSERT INTO Lease (vehicleID,CustomerID, startDate, endDate, type) VALUES ('" +VehicleID + "','" +CustomerID + "','" + startDate + "','" + endDate + "','" + type + "')";
-		String query1="select * from Lease l inner join Customer c ON l.CustomerID=c.CustomerID Inner Join Vehicle v ON l.VehicleID=v.VehicleID where l.customerID='"+CustomerID+"' AND l.vehicleID='"+VehicleID+"'";
-		try
-		{
-			c.s.executeUpdate(query);
-			ResultSet rs=c.s.executeQuery(query1);
-			while(rs.next())
-			{
-				Customer customer=new Customer(rs.getInt("CustomerID"),rs.getString("firstName"),rs.getString("lastName"),rs.getString("email"),rs.getLong("PhoneNumber"));
-				Vehicle vehicle=new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("year"),rs.getDouble("dailyRate"),rs.getString("status"),rs.getInt("PassengerCapacity"),rs.getDouble("engineCapacity"));
-			lease=new Lease(rs.getInt("LeaseID"),vehicle,customer,rs.getString("startDate"),rs.getString("EndDate"),rs.getString("type"));	
-			}
-			System.out.println("Lease Created");
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return lease;
+	public Lease createLease(int VehicleID, int CustomerID, String startDate, String endDate) {
+	    DBConnection c = new DBConnection();
+	    Lease lease = null;
+	    LocalDate sDate = LocalDate.parse(startDate);
+	    LocalDate eDate = LocalDate.parse(endDate);
+	    long diff = ChronoUnit.DAYS.between(sDate, eDate);
+	    String type = (diff > 30) ? "Monthly" : "Daily";
+	    System.out.println(type);
+
+	    String query = "INSERT INTO Lease (vehicleID, CustomerID, startDate, endDate, type) VALUES ('" + VehicleID + "','" + CustomerID + "','" + sDate + "','" + endDate + "','" + type + "')";
+	    String query1 = "SELECT * FROM Lease l INNER JOIN Customer c ON l.CustomerID = c.CustomerID INNER JOIN Vehicle v ON l.VehicleID = v.VehicleID WHERE l.customerID = '" + CustomerID + "' AND l.vehicleID = '" + VehicleID + "'";
+
+	    try {
+	        c.s.executeUpdate(query);
+	        ResultSet rs = c.s.executeQuery(query1);
+
+	        while (rs.next()) {
+	            Customer customer = new Customer(rs.getInt("CustomerID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getLong("PhoneNumber"));
+	            Vehicle vehicle = new Vehicle(rs.getInt("VehicleID"), rs.getString("Make"), rs.getString("Model"), rs.getInt("year"), rs.getDouble("dailyRate"), rs.getBoolean("status"), rs.getInt("PassengerCapacity"), rs.getInt("engineCapacity"));
+
+	            // Retrieve 'type' as a string from the ResultSet
+	            String typeFromDB = rs.getString("type");
+
+	            // Convert 'type' string to LeaseType enum
+	            Lease.LeaseType leaseType = Lease.LeaseType.valueOf(typeFromDB.toUpperCase());  // Adjust case if needed
+
+	            // Create a new Lease object
+	            lease = new Lease(rs.getInt("LeaseID"), rs.getInt("CustomerID"), rs.getInt("VehicleID"), rs.getDate("startDate"), rs.getDate("EndDate"), leaseType);
+	        }
+	        System.out.println("Lease Created");
+	    } catch (Exception e) {
+	        System.out.println(e.getMessage());
+	    }
+
+	    return lease;
 	}
+
 
 	@Override
 	public void returnCar(int leaseID) {
@@ -291,49 +290,67 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 
 	@Override
 	public List<Lease> listActiveLease() {
-		Conn c=new Conn();
-		String query="select * from Lease l Inner join Vehicle v ON l.VehicleID=v.VehicleID Inner Join Customer c ON l.CustomerID=c.CustomerID where startDate<=CURDATE() AND endDate>=CURDATE()";
-		List<Lease> lease=new ArrayList<>();
-		try
-		{
-			ResultSet rs=c.s.executeQuery(query);
-			while(rs.next())
-			{
-				Customer customer=new Customer(rs.getInt("CustomerID"),rs.getString("firstName"),rs.getString("lastName"),rs.getString("email"),rs.getLong("PhoneNumber"));
-				Vehicle vehicle=new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("year"),rs.getDouble("dailyRate"),rs.getString("status"),rs.getInt("PassengerCapacity"),rs.getDouble("engineCapacity"));
-				lease.add(new Lease(rs.getInt("LeaseID"),vehicle,customer,rs.getString("startDate"),rs.getString("EndDate"),rs.getString("type")));
-			}
-			
-			System.out.println("Retrival success");
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return lease;
+	    DBConnection c = new DBConnection();
+	    String query = "SELECT * FROM Lease l INNER JOIN Vehicle v ON l.VehicleID = v.VehicleID INNER JOIN Customer c ON l.CustomerID = c.CustomerID WHERE startDate <= CURDATE() AND endDate >= CURDATE()";
+	    List<Lease> leases = new ArrayList<>();
+
+	    try {
+	        ResultSet rs = c.s.executeQuery(query);
+	        while (rs.next()) {
+	            // Create Customer object
+	            Customer customer = new Customer(rs.getInt("CustomerID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getLong("PhoneNumber"));
+
+	            // Create Vehicle object
+	            Vehicle vehicle = new Vehicle(rs.getInt("VehicleID"), rs.getString("Make"), rs.getString("Model"), rs.getInt("year"), rs.getDouble("dailyRate"), rs.getBoolean("status"), rs.getInt("PassengerCapacity"), rs.getInt("engineCapacity"));
+
+	            // Retrieve 'type' as a string from the ResultSet
+	            String typeFromDB = rs.getString("type");
+
+	            // Convert 'type' string to LeaseType enum
+	            Lease.LeaseType leaseType = Lease.LeaseType.valueOf(typeFromDB.toUpperCase());  // Adjust case if needed
+
+	            // Create a new Lease object and add it to the list
+	            leases.add(new Lease(rs.getInt("LeaseID"), rs.getInt("CustomerID"), rs.getInt("VehicleID"), rs.getDate("startDate"), rs.getDate("EndDate"), leaseType));
+	        }
+
+	        System.out.println("Retrieval success");
+	    } catch (Exception e) {
+	        System.out.println(e.getMessage());
+	    }
+	    return leases;
 	}
+
 
 	@Override
 	public List<Lease> listLeaseHistory() {
-		List<Lease> lease=new ArrayList<>();
-		DBConnection c=new DBConnection();
-		String query="select * from Lease l Inner join Vehicle v ON l.VehicleID=v.VehicleID Inner Join Customer c ON l.CustomerID=c.CustomerID";
-		try
-		{
-			ResultSet rs=c.s.executeQuery(query);
-			while(rs.next())
-			{
-				Customer customer=new Customer(rs.getInt("CustomerID"),rs.getString("firstName"),rs.getString("lastName"),rs.getString("email"),rs.getLong("PhoneNumber"));
-				Vehicle vehicle=new Vehicle(rs.getInt("VehicleID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("year"),rs.getDouble("dailyRate"),rs.getString("status"),rs.getInt("PassengerCapacity"),rs.getDouble("engineCapacity"));
-				lease.add(new Lease(rs.getInt("LeaseID"),vehicle,customer,rs.getString("startDate"),rs.getString("EndDate"),rs.getString("type")));
-			}
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return lease;
+	    List<Lease> leases = new ArrayList<>();
+	    DBConnection c = new DBConnection();
+	    String query = "SELECT * FROM Lease l INNER JOIN Vehicle v ON l.VehicleID = v.VehicleID INNER JOIN Customer c ON l.CustomerID = c.CustomerID";
+
+	    try {
+	        ResultSet rs = c.s.executeQuery(query);
+	        while (rs.next()) {
+	            // Create Customer object
+	            Customer customer = new Customer(rs.getInt("CustomerID"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getLong("PhoneNumber"));
+
+	            // Create Vehicle object
+	            Vehicle vehicle = new Vehicle(rs.getInt("VehicleID"), rs.getString("Make"), rs.getString("Model"), rs.getInt("year and h"), rs.getDouble("dailyRate"), rs.getBoolean("status"), rs.getInt("PassengerCapacity"), rs.getInt("engineCapacity"));
+
+	            // Retrieve 'type' as a string from the ResultSet
+	            String typeFromDB = rs.getString("type");
+
+	            // Convert 'type' string to LeaseType enum
+	            Lease.LeaseType leaseType = Lease.LeaseType.valueOf(typeFromDB.toUpperCase());  // Adjust case if needed
+
+	            // Create a new Lease object and add it to the list
+	            leases.add(new Lease(rs.getInt("LeaseID"), rs.getInt("CustomerID"), rs.getInt("VehicleID"), rs.getDate("startDate"), rs.getDate("EndDate"), leaseType));
+	        }
+	    } catch (Exception e) {
+	        System.out.println(e.getMessage());
+	    }
+	    return leases;
 	}
+
 
 	@Override
 	public void recordPayment(int LeaseID) {
@@ -350,6 +367,60 @@ public class ICarLeaseImpl implements ICarLeaseRepository
 		{
 			System.out.println(e.getMessage());
 		}
+		
+	}
+
+	@Override
+	public void addVehicle(Vehicle vehicle) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeVehicle(int vehicleID) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Vehicle> listAvailableVehicles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Vehicle> listRentedVehicles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vehicle findVehicleById(int vehicleID) throws CarNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Lease createLease(int customerID, int vehicleID, Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void returnVehicle(int leaseID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Lease> listActiveLeases() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void recordPayment(Lease lease, double amount) {
+		// TODO Auto-generated method stub
 		
 	}
 
