@@ -9,19 +9,14 @@ public class Lease {
     private int carID;
     private LocalDate startDate;
     private LocalDate endDate;
-    private LeaseType type;
 
-    public enum LeaseType {
-        DAILY, MONTHLY
-    }
 
-    public Lease(int leaseID, int customerID, int vehicleID, Date startDate2, Date endDate2, LeaseType type) {
+    public Lease(int leaseID, int customerID, int vehicleID, Date startDate2, Date endDate2) {
         this.leaseID = leaseID;
         this.customerID = customerID;
         this.carID = vehicleID;
         this.startDate = startDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         this.endDate = endDate2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        this.type = type;
     }
 
     // Getter methods
@@ -45,10 +40,6 @@ public class Lease {
         return endDate;
     }
 
-    public LeaseType getType() {
-        return type;
-    }
-
     // Setter methods (if needed)
 
     // Additional methods
@@ -57,8 +48,7 @@ public class Lease {
                 ", Customer ID: " + customerID +
                 ", Car ID: " + carID +
                 ", Start Date: " + startDate +
-                ", End Date: " + endDate +
-                ", Lease Type: " + type);
+                ", End Date: " + endDate);
     }
 
     public Customer getCustomer() {
@@ -70,6 +60,11 @@ public class Lease {
         // TODO: Implement this method
         return null;
     }
+
+	public String getYear() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
     // Add more methods as needed for specific functionality
 }

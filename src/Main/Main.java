@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Scanner;
 import dao.*;
 import Model.*;
+import Model.Vehicle;
 import dao.ICarLeaseImpl;
 
 public class Main {
 	public static void main(String[] args)
 	{ 
+		
 	     Scanner sc=new Scanner(System.in);
 	  System.out.println("1.Vehicle");
       System.out.println("2.Customer");
@@ -49,6 +51,7 @@ public class Main {
 	public static void vehicleManagement()
 	{
 		Scanner sc=new Scanner(System.in);
+		
 		 ICarLeaseImpl icl = new ICarLeaseImpl();
 		System.out.println("Enter Vehicle Details");
 		System.out.println("1.Enter New Car into Vehicles Table");
@@ -92,7 +95,7 @@ public class Main {
 			System.out.println("Listing all available cars");
 			icl.listAvailableCars();
 			List<Vehicle> v=icl.listAvailableCars();
-			//System.out.println(v);
+			System.out.println(v);
 			for(Vehicle veh: v)
 			{
 				    System.out.println("Vehicle ID: " + veh.getVehicleID());
@@ -106,6 +109,7 @@ public class Main {
 			        System.out.println("------------------------");
 			}
 			break;
+		
 		case 4:
 			System.out.println("Listing all Rented cars");
 			icl.listCustomers();
@@ -250,13 +254,6 @@ public class Main {
 				System.out.println("Customer Email:"+lease.getCustomer().getEmail());
 				System.out.println("Customer Phone:"+lease.getCustomer().getPhoneNumber());
 				System.out.println("VehicleID:  "+lease.getCarID());
-//				System.out.println("Vehicle Model:  "+veh.getModel());
-//				System.out.println("Vehicle Year: "+lease.getVehicle().getYear());
-//				System.out.println("Vehicle DailyRate:  "+lease.getVehicle().getDailyRate());
-//				System.out.println(lease.getVehicle().getStatus());
-//				System.out.println("Vehicle Capacity: "+lease.getVehicle().getPassengerCapacity());
-//				System.out.println(lease.getVehicle().getEngineCapacity());
-				System.out.println(lease.getType());
 
 				break;
 			case 2:
@@ -284,7 +281,6 @@ public class Main {
 //					System.out.println(l.getVehicle().getEngineCapacity());
 					System.out.println("StartDate: "+l.getStartDate());
 					System.out.println("EndDate: "+l.getEndDate());
-					System.out.println("LeaseType: "+l.getType());
 					System.out.println("----------------------------------");
 				}
 				break;
@@ -308,7 +304,6 @@ public class Main {
 //					System.out.println(l.getVehicle().getEngineCapacity());
 					System.out.println("StartDate: "+l.getStartDate());
 					System.out.println("EndDate: "+l.getEndDate());
-					System.out.println("LeaseType: "+l.getType());
 					System.out.println("----------------------------------");				}
 				break;
 			case 5:
